@@ -1,0 +1,873 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ORTEX Textile Industry — Next-Gen Material Engine</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- FontAwesome for crisp modern icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        ortex: {
+                            gold: '#D4AF37',
+                            sand: '#E6DFD5',
+                            dark: '#0D0E10',
+                            navy: '#121926',
+                            muted: '#8E95A2',
+                            accent: '#C5A059'
+                        }
+                    },
+                    fontFamily: {
+                        serif: ['Cinzel', 'serif'],
+                        sans: ['Inter', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .glass-header {
+            background: rgba(13, 14, 16, 0.85);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+        }
+        .fabric-zoom {
+            transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .fabric-card:hover .fabric-zoom {
+            transform: scale(1.08);
+        }
+        /* Custom scrollbars */
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #0d0e10;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #2b303b;
+            border-radius: 3px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #d4af37;
+        }
+    </style>
+</head>
+<body class="bg-ortex-dark text-slate-100 font-sans antialiased selection:bg-ortex-gold selection:text-black">
+
+<!-- Header Navigation -->
+<header id="main-header" class="fixed top-0 left-0 w-full z-50 glass-header border-b border-white/10 transition-all duration-300">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
+        <!-- Brand Logo -->
+        <a href="#" class="flex items-center gap-3 group">
+            <div class="w-10 h-10 border border-ortex-gold/60 rounded-full flex items-center justify-center relative overflow-hidden group-hover:border-ortex-gold transition-colors">
+                <span class="absolute inset-0 bg-ortex-gold/10 opacity-0 group-hover:opacity-100 transition-opacity"></span>
+                <i class="fa-solid fa-layer-group text-ortex-gold text-lg"></i>
+            </div>
+            <div>
+                <span class="font-serif tracking-widest text-lg font-bold block text-white leading-none">ORTEX</span>
+                <span class="text-[9px] tracking-[0.25em] text-ortex-muted uppercase font-semibold">Textile Industry</span>
+            </div>
+        </a>
+
+        <!-- Desktop Navigation -->
+        <nav class="hidden md:flex items-center gap-8 text-xs tracking-widest font-medium uppercase">
+            <a href="#hero" class="text-white hover:text-ortex-gold transition-colors">Home</a>
+            
+            <!-- Dropdown Mega Menu Trigger -->
+            <div class="relative group py-6">
+                <button class="flex items-center gap-1.5 text-slate-300 group-hover:text-ortex-gold transition-colors">
+                    Materials <i class="fa-solid fa-chevron-down text-[10px] text-ortex-muted group-hover:rotate-180 transition-transform"></i>
+                </button>
+                
+                <!-- Mega Dropdown -->
+                <div class="absolute left-1/2 -translate-x-1/2 top-full w-[600px] bg-ortex-navy/95 border border-white/10 rounded-xl p-6 shadow-2xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 backdrop-blur-xl">
+                    <div class="grid grid-cols-2 gap-4">
+                        <a href="#materials" onclick="filterCategory('woven')" class="p-3 rounded-lg hover:bg-white/5 transition-colors flex items-start gap-3">
+                            <div class="p-2.5 rounded bg-ortex-gold/10 text-ortex-gold"><i class="fa-solid fa-border-all"></i></div>
+                            <div>
+                                <h4 class="text-sm font-semibold text-white">Woven Fabrics</h4>
+                                <p class="text-xs text-ortex-muted normal-case mt-0.5">High tensile structural weaves & tailored finishes.</p>
+                            </div>
+                        </a>
+                        <a href="#materials" onclick="filterCategory('knitted')" class="p-3 rounded-lg hover:bg-white/5 transition-colors flex items-start gap-3">
+                            <div class="p-2.5 rounded bg-ortex-gold/10 text-ortex-gold"><i class="fa-solid fa-wave-square"></i></div>
+                            <div>
+                                <h4 class="text-sm font-semibold text-white">Knitted Fabrics</h4>
+                                <p class="text-xs text-ortex-muted normal-case mt-0.5">Fluid stretch constructions and activewear textiles.</p>
+                            </div>
+                        </a>
+                        <a href="#materials" onclick="filterCategory('cotton')" class="p-3 rounded-lg hover:bg-white/5 transition-colors flex items-start gap-3">
+                            <div class="p-2.5 rounded bg-ortex-gold/10 text-ortex-gold"><i class="fa-solid fa-seedling"></i></div>
+                            <div>
+                                <h4 class="text-sm font-semibold text-white">Organic Cottons</h4>
+                                <p class="text-xs text-ortex-muted normal-case mt-0.5">GOTS-certified sustainable luxury staples.</p>
+                            </div>
+                        </a>
+                        <a href="#materials" onclick="filterCategory('technical')" class="p-3 rounded-lg hover:bg-white/5 transition-colors flex items-start gap-3">
+                            <div class="p-2.5 rounded bg-ortex-gold/10 text-ortex-gold"><i class="fa-solid fa-shield-halved"></i></div>
+                            <div>
+                                <h4 class="text-sm font-semibold text-white">Technical Fabrics</h4>
+                                <p class="text-xs text-ortex-muted normal-case mt-0.5">Flame resistant, water repellent & smart fibers.</p>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <a href="#process" class="text-slate-300 hover:text-ortex-gold transition-colors">Manufacturing</a>
+            <a href="#quality" class="text-slate-300 hover:text-ortex-gold transition-colors">Quality Assurance</a>
+            <a href="#configurator" class="text-slate-300 hover:text-ortex-gold transition-colors">Configurator</a>
+        </nav>
+
+        <!-- Header Controls -->
+        <div class="flex items-center gap-4">
+            <!-- Global Search Toggle -->
+            <button onclick="toggleSearchModal()" class="w-10 h-10 rounded-full border border-white/10 flex items-center justify-center text-slate-300 hover:text-white hover:border-ortex-gold transition-colors" aria-label="Search">
+                <i class="fa-solid fa-magnifying-glass text-sm"></i>
+            </button>
+
+            <!-- Sample Basket Indicator -->
+            <button onclick="toggleBasketDrawer()" class="relative w-10 h-10 rounded-full border border-white/10 flex items-center justify-center text-slate-300 hover:text-white hover:border-ortex-gold transition-colors" aria-label="Sample Cart">
+                <i class="fa-solid fa-box-archive text-sm"></i>
+                <span id="basket-count" class="absolute -top-1 -right-1 w-5 h-5 bg-ortex-gold text-black font-bold text-[10px] rounded-full flex items-center justify-center">0</span>
+            </button>
+
+            <!-- Primary Contact CTA -->
+            <a href="#contact" class="hidden sm:inline-flex items-center justify-center px-5 py-2.5 rounded-full bg-ortex-gold text-black font-semibold text-xs tracking-wider uppercase hover:bg-yellow-400 transition-colors shadow-lg shadow-ortex-gold/10">
+                Request Swatch Kit
+            </a>
+        </div>
+    </div>
+</header>
+
+<!-- Hero Section -->
+<section id="hero" class="relative min-h-screen pt-28 pb-16 flex items-center justify-center overflow-hidden">
+    <!-- Background Visual -->
+    <div class="absolute inset-0 z-0">
+        <img src="https://images.unsplash.com/photo-1584100936595-c0654b55a2e2?auto=format&fit=crop&w=2000&q=80" 
+             alt="Champagne textile background" 
+             class="w-full h-full object-cover object-center opacity-40 scale-105 animate-pulse duration-[10000ms]">
+        <div class="absolute inset-0 bg-gradient-to-t from-ortex-dark via-ortex-dark/60 to-transparent"></div>
+        <div class="absolute inset-0 bg-gradient-to-r from-ortex-dark/80 via-transparent to-ortex-dark/80"></div>
+    </div>
+
+    <div class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
+        <div class="max-w-3xl">
+            <!-- Badge -->
+            <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/5 border border-white/10 text-ortex-gold text-xs font-mono tracking-widest uppercase mb-6 backdrop-blur-md">
+                <span class="w-2 h-2 rounded-full bg-ortex-gold animate-ping"></span>
+                Engineered Texture · Certified Quality
+            </div>
+
+            <h1 class="font-serif text-4xl sm:text-6xl lg:text-7xl font-bold tracking-tight text-white leading-[1.1] mb-6">
+                WE DON’T JUST MAKE FABRIC.<br>
+                <span class="text-transparent bg-clip-text bg-gradient-to-r from-ortex-gold via-yellow-200 to-ortex-sand">WE CREATE WHAT COMES NEXT.</span>
+            </h1>
+
+            <p class="text-slate-300 text-base sm:text-lg font-light leading-relaxed mb-8 max-w-2xl">
+                Discover next-generation textile manufacturing built around high-performance material specifications, creative customization, and global sustainability standards.
+            </p>
+
+            <!-- Hero CTAs -->
+            <div class="flex flex-wrap items-center gap-4">
+                <a href="#materials" class="px-8 py-4 rounded-full bg-ortex-gold text-black font-semibold text-xs tracking-widest uppercase hover:bg-yellow-400 transition-all shadow-xl shadow-ortex-gold/20 flex items-center gap-2">
+                    Explore Materials <i class="fa-solid fa-arrow-right text-xs"></i>
+                </a>
+                <a href="#configurator" class="px-8 py-4 rounded-full bg-white/5 hover:bg-white/10 border border-white/20 text-white font-semibold text-xs tracking-widest uppercase backdrop-blur-md transition-all flex items-center gap-2">
+                    Custom Spec Configurator
+                </a>
+            </div>
+
+            <!-- Stats Bar -->
+            <div class="grid grid-cols-3 gap-6 mt-16 pt-8 border-t border-white/10 max-w-xl">
+                <div>
+                    <span class="block font-serif text-2xl sm:text-3xl font-bold text-white">120+</span>
+                    <span class="text-xs text-ortex-muted uppercase tracking-wider">Certified Weaves</span>
+                </div>
+                <div>
+                    <span class="block font-serif text-2xl sm:text-3xl font-bold text-white">100%</span>
+                    <span class="text-xs text-ortex-muted uppercase tracking-wider">Traceable Fibers</span>
+                </div>
+                <div>
+                    <span class="block font-serif text-2xl sm:text-3xl font-bold text-white">GOTS & ISO</span>
+                    <span class="text-xs text-ortex-muted uppercase tracking-wider">Audited Quality</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Material Collection Catalog Section -->
+<section id="materials" class="py-24 bg-ortex-dark/90 border-t border-white/5">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <!-- Section Header -->
+        <div class="flex flex-col md:flex-row md:items-end justify-between mb-12 gap-6">
+            <div>
+                <span class="text-ortex-gold text-xs font-mono tracking-widest uppercase block mb-2">// Material Library</span>
+                <h2 class="font-serif text-3xl sm:text-5xl font-bold text-white">MATERIALS THAT INSPIRE.</h2>
+            </div>
+
+            <!-- Interactive Filters -->
+            <div class="flex flex-wrap items-center gap-2 bg-white/5 p-1.5 rounded-xl border border-white/10 backdrop-blur-md">
+                <button onclick="filterCategory('all')" class="cat-btn active px-4 py-2 rounded-lg text-xs font-semibold tracking-wider uppercase transition-all bg-ortex-gold text-black" data-cat="all">All Fabrics</button>
+                <button onclick="filterCategory('woven')" class="cat-btn px-4 py-2 rounded-lg text-xs font-semibold tracking-wider uppercase text-slate-400 hover:text-white transition-all" data-cat="woven">Woven</button>
+                <button onclick="filterCategory('knitted')" class="cat-btn px-4 py-2 rounded-lg text-xs font-semibold tracking-wider uppercase text-slate-400 hover:text-white transition-all" data-cat="knitted">Knitted</button>
+                <button onclick="filterCategory('cotton')" class="cat-btn px-4 py-2 rounded-lg text-xs font-semibold tracking-wider uppercase text-slate-400 hover:text-white transition-all" data-cat="cotton">Organic Cotton</button>
+                <button onclick="filterCategory('technical')" class="cat-btn px-4 py-2 rounded-lg text-xs font-semibold tracking-wider uppercase text-slate-400 hover:text-white transition-all" data-cat="technical">Technical</button>
+            </div>
+        </div>
+
+        <!-- Material Grid -->
+        <div id="material-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <!-- Fabric Item 1 -->
+            <div class="fabric-card group bg-ortex-navy/50 rounded-2xl border border-white/10 overflow-hidden flex flex-col justify-between transition-all duration-300 hover:border-ortex-gold/50 hover:shadow-2xl hover:shadow-ortex-gold/5" data-category="woven">
+                <div>
+                    <div class="relative h-64 overflow-hidden">
+                        <img src="https://images.unsplash.com/photo-1604719312566-8912e9227c6a?auto=format&fit=crop&w=800&q=80" 
+                             alt="Structured Woven Twill" 
+                             class="fabric-zoom w-full h-full object-cover">
+                        <div class="absolute top-4 left-4 flex gap-2">
+                            <span class="px-2.5 py-1 rounded bg-black/60 backdrop-blur-md text-[10px] uppercase font-mono text-ortex-gold border border-ortex-gold/30">Woven</span>
+                            <span class="px-2.5 py-1 rounded bg-emerald-500/20 backdrop-blur-md text-[10px] uppercase font-mono text-emerald-400 border border-emerald-500/30">In Stock</span>
+                        </div>
+                        <button onclick="openModal('Heavyweight Structural Twill', 'Woven', '380 GSM', '100% Recycled Cotton', 'High-density diagonal weave engineered for durable architectural apparel and heavy workwear.', 'https://images.unsplash.com/photo-1604719312566-8912e9227c6a?auto=format&fit=crop&w=800&q=80')" 
+                                class="absolute bottom-4 right-4 w-10 h-10 rounded-full bg-black/70 backdrop-blur-md text-white border border-white/20 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity hover:bg-ortex-gold hover:text-black">
+                            <i class="fa-solid fa-expand text-xs"></i>
+                        </button>
+                    </div>
+                    
+                    <div class="p-6">
+                        <div class="flex items-center justify-between mb-2">
+                            <h3 class="font-serif text-xl font-bold text-white group-hover:text-ortex-gold transition-colors">Structural Twill 380</h3>
+                        </div>
+                        <p class="text-ortex-muted text-xs leading-relaxed mb-4">Interlaced heavy diagonal construction designed for protective outerwear and luxury structuring.</p>
+                        
+                        <!-- Technical Chips -->
+                        <div class="grid grid-cols-2 gap-2 text-[11px] font-mono text-slate-300 mb-6 bg-white/5 p-3 rounded-lg border border-white/5">
+                            <div><span class="text-ortex-muted block">Weight:</span> 380 GSM</div>
+                            <div><span class="text-ortex-muted block">Comp:</span> 100% Organic</div>
+                            <div><span class="text-ortex-muted block">Width:</span> 150 cm</div>
+                            <div><span class="text-ortex-muted block">MOQ:</span> 300 Meters</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="px-6 pb-6 pt-0 flex items-center justify-between gap-3 border-t border-white/5 pt-4">
+                    <button onclick="addSample('Structural Twill 380')" class="w-full py-2.5 rounded-lg bg-white/5 hover:bg-ortex-gold hover:text-black border border-white/10 text-white font-semibold text-xs uppercase tracking-wider transition-all flex items-center justify-center gap-2">
+                        <i class="fa-solid fa-plus text-xs"></i> Add Swatch Sample
+                    </button>
+                </div>
+            </div>
+
+            <!-- Fabric Item 2 -->
+            <div class="fabric-card group bg-ortex-navy/50 rounded-2xl border border-white/10 overflow-hidden flex flex-col justify-between transition-all duration-300 hover:border-ortex-gold/50 hover:shadow-2xl hover:shadow-ortex-gold/5" data-category="knitted">
+                <div>
+                    <div class="relative h-64 overflow-hidden">
+                        <img src="https://images.unsplash.com/photo-1528459801416-a9e53bbf4e17?auto=format&fit=crop&w=800&q=80" 
+                             alt="Fluid Bamboo Jersey" 
+                             class="fabric-zoom w-full h-full object-cover">
+                        <div class="absolute top-4 left-4 flex gap-2">
+                            <span class="px-2.5 py-1 rounded bg-black/60 backdrop-blur-md text-[10px] uppercase font-mono text-ortex-gold border border-ortex-gold/30">Knitted</span>
+                            <span class="px-2.5 py-1 rounded bg-emerald-500/20 backdrop-blur-md text-[10px] uppercase font-mono text-emerald-400 border border-emerald-500/30">In Stock</span>
+                        </div>
+                        <button onclick="openModal('Fluid Bamboo Modal Jersey', 'Knitted', '210 GSM', '70% Bamboo / 30% Fine Cotton', 'Ultra-soft interlock knit with natural breathability and smooth drape.', 'https://images.unsplash.com/photo-1528459801416-a9e53bbf4e17?auto=format&fit=crop&w=800&q=80')" 
+                                class="absolute bottom-4 right-4 w-10 h-10 rounded-full bg-black/70 backdrop-blur-md text-white border border-white/20 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity hover:bg-ortex-gold hover:text-black">
+                            <i class="fa-solid fa-expand text-xs"></i>
+                        </button>
+                    </div>
+                    
+                    <div class="p-6">
+                        <div class="flex items-center justify-between mb-2">
+                            <h3 class="font-serif text-xl font-bold text-white group-hover:text-ortex-gold transition-colors">Fluid Bamboo Jersey</h3>
+                        </div>
+                        <p class="text-ortex-muted text-xs leading-relaxed mb-4">Looped stretch construction featuring an elegant matte sheen and silk-like skin touch.</p>
+                        
+                        <div class="grid grid-cols-2 gap-2 text-[11px] font-mono text-slate-300 mb-6 bg-white/5 p-3 rounded-lg border border-white/5">
+                            <div><span class="text-ortex-muted block">Weight:</span> 210 GSM</div>
+                            <div><span class="text-ortex-muted block">Comp:</span> Bamboo/Cotton</div>
+                            <div><span class="text-ortex-muted block">Width:</span> 180 cm</div>
+                            <div><span class="text-ortex-muted block">MOQ:</span> 200 Meters</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="px-6 pb-6 pt-0 flex items-center justify-between gap-3 border-t border-white/5 pt-4">
+                    <button onclick="addSample('Fluid Bamboo Jersey')" class="w-full py-2.5 rounded-lg bg-white/5 hover:bg-ortex-gold hover:text-black border border-white/10 text-white font-semibold text-xs uppercase tracking-wider transition-all flex items-center justify-center gap-2">
+                        <i class="fa-solid fa-plus text-xs"></i> Add Swatch Sample
+                    </button>
+                </div>
+            </div>
+
+            <!-- Fabric Item 3 -->
+            <div class="fabric-card group bg-ortex-navy/50 rounded-2xl border border-white/10 overflow-hidden flex flex-col justify-between transition-all duration-300 hover:border-ortex-gold/50 hover:shadow-2xl hover:shadow-ortex-gold/5" data-category="cotton">
+                <div>
+                    <div class="relative h-64 overflow-hidden">
+                        <img src="https://images.unsplash.com/photo-1579546929518-9e396f3cc809?auto=format&fit=crop&w=800&q=80" 
+                             alt="GOTS Organic Crisp Poplin" 
+                             class="fabric-zoom w-full h-full object-cover">
+                        <div class="absolute top-4 left-4 flex gap-2">
+                            <span class="px-2.5 py-1 rounded bg-black/60 backdrop-blur-md text-[10px] uppercase font-mono text-ortex-gold border border-ortex-gold/30">Organic Cotton</span>
+                            <span class="px-2.5 py-1 rounded bg-amber-500/20 backdrop-blur-md text-[10px] uppercase font-mono text-amber-400 border border-amber-500/30">Made To Order</span>
+                        </div>
+                        <button onclick="openModal('Crisp GOTS Poplin', 'Cotton', '140 GSM', '100% GOTS Certified Cotton', 'Breathable plain weave with high thread density for luxury shirting.', 'https://images.unsplash.com/photo-1579546929518-9e396f3cc809?auto=format&fit=crop&w=800&q=80')" 
+                                class="absolute bottom-4 right-4 w-10 h-10 rounded-full bg-black/70 backdrop-blur-md text-white border border-white/20 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity hover:bg-ortex-gold hover:text-black">
+                            <i class="fa-solid fa-expand text-xs"></i>
+                        </button>
+                    </div>
+                    
+                    <div class="p-6">
+                        <div class="flex items-center justify-between mb-2">
+                            <h3 class="font-serif text-xl font-bold text-white group-hover:text-ortex-gold transition-colors">Crisp Organic Poplin</h3>
+                        </div>
+                        <p class="text-ortex-muted text-xs leading-relaxed mb-4">Fine combed long-staple cotton offering exceptionally smooth, crisp surface tactile feedback.</p>
+                        
+                        <div class="grid grid-cols-2 gap-2 text-[11px] font-mono text-slate-300 mb-6 bg-white/5 p-3 rounded-lg border border-white/5">
+                            <div><span class="text-ortex-muted block">Weight:</span> 140 GSM</div>
+                            <div><span class="text-ortex-muted block">Comp:</span> 100% GOTS Cotton</div>
+                            <div><span class="text-ortex-muted block">Width:</span> 145 cm</div>
+                            <div><span class="text-ortex-muted block">MOQ:</span> 500 Meters</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="px-6 pb-6 pt-0 flex items-center justify-between gap-3 border-t border-white/5 pt-4">
+                    <button onclick="addSample('Crisp Organic Poplin')" class="w-full py-2.5 rounded-lg bg-white/5 hover:bg-ortex-gold hover:text-black border border-white/10 text-white font-semibold text-xs uppercase tracking-wider transition-all flex items-center justify-center gap-2">
+                        <i class="fa-solid fa-plus text-xs"></i> Add Swatch Sample
+                    </button>
+                </div>
+            </div>
+
+            <!-- Fabric Item 4 -->
+            <div class="fabric-card group bg-ortex-navy/50 rounded-2xl border border-white/10 overflow-hidden flex flex-col justify-between transition-all duration-300 hover:border-ortex-gold/50 hover:shadow-2xl hover:shadow-ortex-gold/5" data-category="technical">
+                <div>
+                    <div class="relative h-64 overflow-hidden">
+                        <img src="https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=800&q=80" 
+                             alt="Hydro-Shield Technical Ripstop" 
+                             class="fabric-zoom w-full h-full object-cover">
+                        <div class="absolute top-4 left-4 flex gap-2">
+                            <span class="px-2.5 py-1 rounded bg-black/60 backdrop-blur-md text-[10px] uppercase font-mono text-ortex-gold border border-ortex-gold/30">Technical</span>
+                            <span class="px-2.5 py-1 rounded bg-emerald-500/20 backdrop-blur-md text-[10px] uppercase font-mono text-emerald-400 border border-emerald-500/30">In Stock</span>
+                        </div>
+                        <button onclick="openModal('Hydro-Shield Ripstop 290', 'Technical', '290 GSM', 'Cordura Nylon Blend', 'Waterproof membrane backing with high tear resistance.', 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=800&q=80')" 
+                                class="absolute bottom-4 right-4 w-10 h-10 rounded-full bg-black/70 backdrop-blur-md text-white border border-white/20 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity hover:bg-ortex-gold hover:text-black">
+                            <i class="fa-solid fa-expand text-xs"></i>
+                        </button>
+                    </div>
+                    
+                    <div class="p-6">
+                        <div class="flex items-center justify-between mb-2">
+                            <h3 class="font-serif text-xl font-bold text-white group-hover:text-ortex-gold transition-colors">Hydro-Shield Ripstop</h3>
+                        </div>
+                        <p class="text-ortex-muted text-xs leading-relaxed mb-4">Reinforced grid structure with bio-based DWR finish for extreme outdoor weather gear.</p>
+                        
+                        <div class="grid grid-cols-2 gap-2 text-[11px] font-mono text-slate-300 mb-6 bg-white/5 p-3 rounded-lg border border-white/5">
+                            <div><span class="text-ortex-muted block">Weight:</span> 290 GSM</div>
+                            <div><span class="text-ortex-muted block">Comp:</span> Cordura / Recycled Poly</div>
+                            <div><span class="text-ortex-muted block">Rating:</span> 20,000 mm Hydro</div>
+                            <div><span class="text-ortex-muted block">MOQ:</span> 250 Meters</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="px-6 pb-6 pt-0 flex items-center justify-between gap-3 border-t border-white/5 pt-4">
+                    <button onclick="addSample('Hydro-Shield Ripstop')" class="w-full py-2.5 rounded-lg bg-white/5 hover:bg-ortex-gold hover:text-black border border-white/10 text-white font-semibold text-xs uppercase tracking-wider transition-all flex items-center justify-center gap-2">
+                        <i class="fa-solid fa-plus text-xs"></i> Add Swatch Sample
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Configurator Section -->
+<section id="configurator" class="py-24 bg-gradient-to-b from-ortex-dark via-ortex-navy/40 to-ortex-dark border-t border-white/5 relative">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="max-w-3xl mx-auto text-center mb-16">
+            <span class="text-ortex-gold text-xs font-mono tracking-widest uppercase block mb-2">// Interactive Specification Tool</span>
+            <h2 class="font-serif text-3xl sm:text-5xl font-bold text-white">CUSTOM FABRIC CONFIGURATOR</h2>
+            <p class="text-ortex-muted text-sm mt-4">Tailor exact fiber blends, surface treatments, and technical properties to request a custom factory trial run.</p>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 bg-ortex-navy/80 p-8 rounded-3xl border border-white/10 shadow-2xl backdrop-blur-xl">
+            <!-- Form Controls -->
+            <div class="lg:col-span-7 space-y-6">
+                <!-- Base Weave -->
+                <div>
+                    <label class="block text-xs font-mono uppercase text-ortex-gold mb-2">1. Base Construction Structure</label>
+                    <select id="cfg-structure" onchange="updateConfigurator()" class="w-full bg-ortex-dark border border-white/15 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-ortex-gold">
+                        <option value="Plain Weave (Heavy Duty)">Plain Weave (High Density)</option>
+                        <option value="Twill Construction">Twill Weave (2/1 Diagonal)</option>
+                        <option value="Sateen Weave">Lustrous Satin Weave</option>
+                        <option value="Double Knit Interlock">Double Knit Elastic Interlock</option>
+                    </select>
+                </div>
+
+                <!-- Fiber Composition Slider -->
+                <div>
+                    <div class="flex justify-between items-center mb-2">
+                        <label class="text-xs font-mono uppercase text-ortex-gold">2. Primary Natural / Synthetic Fiber Ratio</label>
+                        <span id="fiber-ratio-val" class="text-xs font-mono text-white">70% Organic Cotton / 30% Recycled Polyester</span>
+                    </div>
+                    <input id="cfg-fiber" type="range" min="0" max="100" value="70" oninput="updateConfigurator()" class="w-full accent-ortex-gold cursor-pointer">
+                </div>
+
+                <!-- Target Weight (GSM) -->
+                <div>
+                    <div class="flex justify-between items-center mb-2">
+                        <label class="text-xs font-mono uppercase text-ortex-gold">3. Desired Fabric Density (GSM)</label>
+                        <span id="gsm-val" class="text-xs font-mono text-white">240 GSM</span>
+                    </div>
+                    <input id="cfg-gsm" type="range" min="100" max="600" step="10" value="240" oninput="updateConfigurator()" class="w-full accent-ortex-gold cursor-pointer">
+                </div>
+
+                <!-- Special Finish Badges -->
+                <div>
+                    <label class="block text-xs font-mono uppercase text-ortex-gold mb-2">4. Performance Finishes & Treatments</label>
+                    <div class="grid grid-cols-2 sm:grid-cols-3 gap-3">
+                        <label class="flex items-center gap-2 p-3 rounded-xl bg-white/5 border border-white/10 cursor-pointer hover:border-white/30">
+                            <input type="checkbox" checked onchange="updateConfigurator()" class="cfg-finish accent-ortex-gold" value="Bio-DWR Waterproofing">
+                            <span class="text-xs text-slate-200">Water Repellent</span>
+                        </label>
+                        <label class="flex items-center gap-2 p-3 rounded-xl bg-white/5 border border-white/10 cursor-pointer hover:border-white/30">
+                            <input type="checkbox" onchange="updateConfigurator()" class="cfg-finish accent-ortex-gold" value="Antimicrobial Silver Ion">
+                            <span class="text-xs text-slate-200">Antimicrobial</span>
+                        </label>
+                        <label class="flex items-center gap-2 p-3 rounded-xl bg-white/5 border border-white/10 cursor-pointer hover:border-white/30">
+                            <input type="checkbox" onchange="updateConfigurator()" class="cfg-finish accent-ortex-gold" value="Flame Retardant ISO">
+                            <span class="text-xs text-slate-200">Flame Resistant</span>
+                        </label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Dynamic Output Preview -->
+            <div class="lg:col-span-5 bg-ortex-dark/80 p-6 rounded-2xl border border-white/10 flex flex-col justify-between">
+                <div>
+                    <div class="flex items-center justify-between pb-4 mb-4 border-b border-white/10">
+                        <span class="text-xs font-mono uppercase text-ortex-muted">Custom Spec Ticket</span>
+                        <span class="px-2 py-0.5 rounded bg-ortex-gold/20 text-ortex-gold text-[10px] font-mono uppercase">Draft #8492</span>
+                    </div>
+
+                    <h3 id="summary-title" class="font-serif text-2xl font-bold text-white mb-4">Custom Engineered Fabric</h3>
+
+                    <ul class="space-y-3 text-xs font-mono text-slate-300">
+                        <li class="flex justify-between"><span class="text-ortex-muted">Structure:</span> <span id="summary-structure">Plain Weave</span></li>
+                        <li class="flex justify-between"><span class="text-ortex-muted">Blend:</span> <span id="summary-blend">70/30 Blend</span></li>
+                        <li class="flex justify-between"><span class="text-ortex-muted">Target GSM:</span> <span id="summary-gsm">240 GSM</span></li>
+                        <li class="flex justify-between"><span class="text-ortex-muted">Finishes:</span> <span id="summary-finishes" class="text-right text-ortex-gold">Bio-DWR</span></li>
+                        <li class="flex justify-between"><span class="text-ortex-muted">Est. Production Lead:</span> <span class="text-emerald-400">14 Business Days</span></li>
+                    </ul>
+                </div>
+
+                <div class="mt-8 pt-4 border-t border-white/10">
+                    <button onclick="submitCustomConfig()" class="w-full py-4 rounded-xl bg-ortex-gold text-black font-semibold text-xs uppercase tracking-widest hover:bg-yellow-400 transition-colors shadow-lg shadow-ortex-gold/10">
+                        Submit Specification for Quotation
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Manufacturing & Quality Assurance -->
+<section id="quality" class="py-24 bg-ortex-dark border-t border-white/5">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+            <div>
+                <span class="text-ortex-gold text-xs font-mono tracking-widest uppercase block mb-2">// ISO Certified Standards</span>
+                <h2 class="font-serif text-3xl sm:text-5xl font-bold text-white mb-6">QUALITY IS BUILT INTO EVERY THREAD.</h2>
+                <p class="text-ortex-muted text-sm leading-relaxed mb-8">
+                    Our rigorous multi-tier quality framework ensures every meter of textile produced adheres strictly to international color fastness, dimensional stability, and physical stress tolerances.
+                </p>
+
+                <!-- Step Timeline -->
+                <div class="space-y-6">
+                    <div class="flex gap-4 items-start">
+                        <div class="w-8 h-8 rounded-full bg-ortex-gold/20 text-ortex-gold font-mono text-xs font-bold flex items-center justify-center shrink-0 border border-ortex-gold/40">01</div>
+                        <div>
+                            <h4 class="text-base font-semibold text-white">Raw Fiber Purity Audit</h4>
+                            <p class="text-xs text-ortex-muted mt-1">Spectroscopic verification of raw fiber composition before spinning processes begin.</p>
+                        </div>
+                    </div>
+
+                    <div class="flex gap-4 items-start">
+                        <div class="w-8 h-8 rounded-full bg-ortex-gold/20 text-ortex-gold font-mono text-xs font-bold flex items-center justify-center shrink-0 border border-ortex-gold/40">02</div>
+                        <div>
+                            <h4 class="text-base font-semibold text-white">Automated Tension Control</h4>
+                            <p class="text-xs text-ortex-muted mt-1">Computerized loom monitoring prevents structural defects and warp variance in real time.</p>
+                        </div>
+                    </div>
+
+                    <div class="flex gap-4 items-start">
+                        <div class="w-8 h-8 rounded-full bg-ortex-gold/20 text-ortex-gold font-mono text-xs font-bold flex items-center justify-center shrink-0 border border-ortex-gold/40">03</div>
+                        <div>
+                            <h4 class="text-base font-semibold text-white">Spectrophotometer Color Matching</h4>
+                            <p class="text-xs text-ortex-muted mt-1">Delta-E precision color evaluation guarantees lab-dip consistency across dyeing batches.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Certifications Badge Grid -->
+            <div class="bg-ortex-navy/40 p-8 rounded-3xl border border-white/10 grid grid-cols-2 gap-6">
+                <div class="p-6 rounded-2xl bg-white/5 border border-white/5 text-center">
+                    <i class="fa-solid fa-leaf text-3xl text-emerald-400 mb-3"></i>
+                    <h5 class="text-sm font-bold text-white">GOTS Certified</h5>
+                    <p class="text-[11px] text-ortex-muted mt-1">100% Organic Textile Standard</p>
+                </div>
+                <div class="p-6 rounded-2xl bg-white/5 border border-white/5 text-center">
+                    <i class="fa-solid fa-shield-cat text-3xl text-ortex-gold mb-3"></i>
+                    <h5 class="text-sm font-bold text-white">OEKO-TEX® 100</h5>
+                    <p class="text-[11px] text-ortex-muted mt-1">Free from harmful substances</p>
+                </div>
+                <div class="p-6 rounded-2xl bg-white/5 border border-white/5 text-center">
+                    <i class="fa-solid fa-award text-3xl text-blue-400 mb-3"></i>
+                    <h5 class="text-sm font-bold text-white">ISO 9001:2026</h5>
+                    <p class="text-[11px] text-ortex-muted mt-1">Certified Quality Management</p>
+                </div>
+                <div class="p-6 rounded-2xl bg-white/5 border border-white/5 text-center">
+                    <i class="fa-solid fa-recycle text-3xl text-teal-400 mb-3"></i>
+                    <h5 class="text-sm font-bold text-white">GRS Standard</h5>
+                    <p class="text-[11px] text-ortex-muted mt-1">Global Recycled Standard Audit</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Contact & Swatch Inquiry Form -->
+<section id="contact" class="py-24 bg-gradient-to-t from-ortex-dark via-ortex-navy/50 to-ortex-dark border-t border-white/5">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="text-center mb-12">
+            <span class="text-ortex-gold text-xs font-mono tracking-widest uppercase block mb-2">// Start a Partnership</span>
+            <h2 class="font-serif text-3xl sm:text-5xl font-bold text-white">LET’S BUILD YOUR NEXT TEXTILE ORDER.</h2>
+            <p class="text-ortex-muted text-sm mt-3">Submit your technical requirements or request physical swatch cards for evaluation.</p>
+        </div>
+
+        <form id="contact-form" onsubmit="handleInquirySubmit(event)" class="bg-ortex-navy/80 p-8 sm:p-10 rounded-3xl border border-white/10 space-y-6 shadow-2xl backdrop-blur-xl">
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                <div>
+                    <label class="block text-xs font-mono text-ortex-muted uppercase mb-2">Full Name *</label>
+                    <input type="text" required placeholder="Jane Doe" class="w-full bg-ortex-dark border border-white/15 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-ortex-gold">
+                </div>
+                <div>
+                    <label class="block text-xs font-mono text-ortex-muted uppercase mb-2">Business Email *</label>
+                    <input type="email" required placeholder="jane@fashionbrand.com" class="w-full bg-ortex-dark border border-white/15 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-ortex-gold">
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                <div>
+                    <label class="block text-xs font-mono text-ortex-muted uppercase mb-2">Primary Material Interest</label>
+                    <select id="contact-material-select" class="w-full bg-ortex-dark border border-white/15 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-ortex-gold">
+                        <option value="Woven Fabrics">Woven Fabrics</option>
+                        <option value="Knitted Fabrics">Knitted Fabrics</option>
+                        <option value="Organic Cottons">Organic Cottons</option>
+                        <option value="Technical Fabrics">Technical & Performance</option>
+                        <option value="Custom Configuration">Custom Factory Blend</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-xs font-mono text-ortex-muted uppercase mb-2">Target Volume (Meters)</label>
+                    <input type="text" placeholder="e.g. 1,500 Meters" class="w-full bg-ortex-dark border border-white/15 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-ortex-gold">
+                </div>
+            </div>
+
+            <div>
+                <label class="block text-xs font-mono text-ortex-muted uppercase mb-2">Project Specification Details</label>
+                <textarea rows="4" placeholder="Describe your intended application, garment styling, or required technical certifications..." class="w-full bg-ortex-dark border border-white/15 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-ortex-gold"></textarea>
+            </div>
+
+            <button type="submit" class="w-full py-4 rounded-xl bg-ortex-gold text-black font-semibold text-xs tracking-widest uppercase hover:bg-yellow-400 transition-colors shadow-lg shadow-ortex-gold/20">
+                Send Inquiry & Request Swatch Kit
+            </button>
+        </form>
+    </div>
+</section>
+
+<!-- Footer -->
+<footer class="bg-black border-t border-white/10 py-16 text-ortex-muted">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-10 mb-12">
+            <div>
+                <div class="flex items-center gap-3 mb-4">
+                    <div class="w-8 h-8 border border-ortex-gold rounded-full flex items-center justify-center">
+                        <i class="fa-solid fa-layer-group text-ortex-gold text-xs"></i>
+                    </div>
+                    <span class="font-serif tracking-widest text-lg font-bold text-white">ORTEX</span>
+                </div>
+                <p class="text-xs text-ortex-muted leading-relaxed">
+                    Engineered in Texture.<br>
+                    Defined by Quality.<br>
+                    Global textile manufacturing for next-gen fashion & industrial brands.
+                </p>
+            </div>
+
+            <div>
+                <h4 class="text-xs font-mono uppercase text-white tracking-widest mb-4">Navigation</h4>
+                <ul class="space-y-2 text-xs">
+                    <li><a href="#materials" class="hover:text-ortex-gold transition-colors">Materials Library</a></li>
+                    <li><a href="#configurator" class="hover:text-ortex-gold transition-colors">Fabric Configurator</a></li>
+                    <li><a href="#quality" class="hover:text-ortex-gold transition-colors">Quality Control</a></li>
+                    <li><a href="#contact" class="hover:text-ortex-gold transition-colors">Sample Requests</a></li>
+                </ul>
+            </div>
+
+            <div>
+                <h4 class="text-xs font-mono uppercase text-white tracking-widest mb-4">Certifications</h4>
+                <ul class="space-y-2 text-xs">
+                    <li>GOTS Organic Certification</li>
+                    <li>OEKO-TEX® Standard 100</li>
+                    <li>ISO 9001 Quality Certified</li>
+                    <li>Global Recycled Standard (GRS)</li>
+                </ul>
+            </div>
+
+            <div>
+                <h4 class="text-xs font-mono uppercase text-white tracking-widest mb-4">HQ Contact</h4>
+                <p class="text-xs leading-relaxed text-slate-400">
+                    Industrial Textile District<br>
+                    Email: inquiries@ortex-textiles.com<br>
+                    Phone: +1 (800) 555-ORTEX
+                </p>
+            </div>
+        </div>
+
+        <div class="pt-8 border-t border-white/10 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs">
+            <p>© 2026 ORTEX TEXTILE INDUSTRY. All rights reserved.</p>
+            <div class="flex gap-6">
+                <a href="#" class="hover:text-white transition-colors">Privacy Policy</a>
+                <a href="#" class="hover:text-white transition-colors">Terms of Service</a>
+                <a href="#" class="hover:text-white transition-colors">Quality Certifications</a>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- Material Detail Modal -->
+<div id="material-modal" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-md flex items-center justify-center p-4 opacity-0 invisible transition-all duration-300">
+    <div class="bg-ortex-navy border border-white/15 rounded-3xl max-w-2xl w-full overflow-hidden shadow-2xl relative">
+        <button onclick="closeModal()" class="absolute top-4 right-4 w-9 h-9 rounded-full bg-black/60 border border-white/20 text-white flex items-center justify-center hover:bg-ortex-gold hover:text-black z-10">
+            <i class="fa-solid fa-xmark text-sm"></i>
+        </button>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2">
+            <img id="modal-img" src="" alt="Detail View" class="w-full h-64 sm:h-full object-cover">
+            <div class="p-6 flex flex-col justify-between">
+                <div>
+                    <span id="modal-category" class="text-[10px] font-mono text-ortex-gold uppercase border border-ortex-gold/30 px-2 py-0.5 rounded">Category</span>
+                    <h3 id="modal-title" class="font-serif text-2xl font-bold text-white mt-2">Fabric Title</h3>
+                    <p id="modal-desc" class="text-xs text-ortex-muted mt-3 leading-relaxed">Fabric description details here...</p>
+
+                    <div class="mt-6 space-y-2 text-xs font-mono">
+                        <p class="text-slate-300"><span class="text-ortex-muted">Weight:</span> <span id="modal-gsm">--</span></p>
+                        <p class="text-slate-300"><span class="text-ortex-muted">Composition:</span> <span id="modal-comp">--</span></p>
+                    </div>
+                </div>
+
+                <button id="modal-add-btn" onclick="" class="mt-6 w-full py-3 rounded-xl bg-ortex-gold text-black font-semibold text-xs uppercase tracking-widest hover:bg-yellow-400 transition-colors">
+                    Add Swatch to Basket
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Sample Basket Drawer -->
+<div id="basket-drawer" class="fixed top-0 right-0 h-full w-80 bg-ortex-navy border-l border-white/10 z-50 p-6 flex flex-col justify-between transform translate-x-full transition-transform duration-300 shadow-2xl">
+    <div>
+        <div class="flex items-center justify-between pb-4 border-b border-white/10 mb-6">
+            <h3 class="font-serif text-lg font-bold text-white">Sample Swatch Basket</h3>
+            <button onclick="toggleBasketDrawer()" class="text-ortex-muted hover:text-white"><i class="fa-solid fa-xmark"></i></button>
+        </div>
+
+        <div id="basket-items" class="space-y-3">
+            <p id="basket-empty" class="text-xs text-ortex-muted italic">No swatches selected yet.</p>
+        </div>
+    </div>
+
+    <div class="pt-4 border-t border-white/10">
+        <a href="#contact" onclick="toggleBasketDrawer()" class="block w-full py-3 rounded-xl bg-ortex-gold text-center text-black font-semibold text-xs uppercase tracking-widest hover:bg-yellow-400 transition-colors">
+            Proceed to Sample Order
+        </a>
+    </div>
+</div>
+
+<!-- Search Modal -->
+<div id="search-modal" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-md flex items-start justify-center pt-24 p-4 opacity-0 invisible transition-all duration-300">
+    <div class="bg-ortex-navy border border-white/15 rounded-2xl max-w-xl w-full p-6 shadow-2xl relative">
+        <div class="flex items-center gap-3 border-b border-white/15 pb-4">
+            <i class="fa-solid fa-magnifying-glass text-ortex-gold"></i>
+            <input type="text" id="search-input" onkeyup="handleSearch()" placeholder="Search by weave, GSM, fiber (e.g. Twill, Cotton)..." class="w-full bg-transparent text-white text-sm focus:outline-none">
+            <button onclick="toggleSearchModal()" class="text-ortex-muted hover:text-white"><i class="fa-solid fa-xmark"></i></button>
+        </div>
+        <div id="search-results" class="mt-4 max-h-60 overflow-y-auto space-y-2 text-xs">
+            <p class="text-ortex-muted italic">Type to search material library...</p>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Sample Basket State
+    let basket = [];
+
+    function addSample(fabricName) {
+        if (!basket.includes(fabricName)) {
+            basket.push(fabricName);
+            updateBasketUI();
+            toggleBasketDrawer();
+        }
+    }
+
+    function removeSample(fabricName) {
+        basket = basket.filter(item => item !== fabricName);
+        updateBasketUI();
+    }
+
+    function updateBasketUI() {
+        const countEl = document.getElementById('basket-count');
+        const container = document.getElementById('basket-items');
+        const emptyMsg = document.getElementById('basket-empty');
+        
+        countEl.innerText = basket.length;
+
+        if (basket.length === 0) {
+            emptyMsg.style.display = 'block';
+            container.innerHTML = '<p id="basket-empty" class="text-xs text-ortex-muted italic">No swatches selected yet.</p>';
+        } else {
+            container.innerHTML = basket.map(item => `
+                <div class="flex items-center justify-between p-3 rounded-xl bg-white/5 border border-white/5">
+                    <span class="text-xs text-white font-medium">${item}</span>
+                    <button onclick="removeSample('${item}')" class="text-xs text-red-400 hover:text-red-300"><i class="fa-solid fa-trash"></i></button>
+                </div>
+            `).join('');
+        }
+    }
+
+    function toggleBasketDrawer() {
+        const drawer = document.getElementById('basket-drawer');
+        drawer.classList.toggle('translate-x-full');
+    }
+
+    // Modal Control
+    function openModal(title, category, gsm, comp, desc, img) {
+        document.getElementById('modal-title').innerText = title;
+        document.getElementById('modal-category').innerText = category;
+        document.getElementById('modal-gsm').innerText = gsm;
+        document.getElementById('modal-comp').innerText = comp;
+        document.getElementById('modal-desc').innerText = desc;
+        document.getElementById('modal-img').src = img;
+        
+        const addBtn = document.getElementById('modal-add-btn');
+        addBtn.onclick = function() {
+            addSample(title);
+            closeModal();
+        };
+
+        const modal = document.getElementById('material-modal');
+        modal.classList.remove('opacity-0', 'invisible');
+    }
+
+    function closeModal() {
+        const modal = document.getElementById('material-modal');
+        modal.classList.add('opacity-0', 'invisible');
+    }
+
+    // Category Filtering
+    function filterCategory(cat) {
+        const cards = document.querySelectorAll('.fabric-card');
+        const buttons = document.querySelectorAll('.cat-btn');
+
+        buttons.forEach(btn => {
+            if (btn.getAttribute('data-cat') === cat) {
+                btn.classList.add('bg-ortex-gold', 'text-black');
+                btn.classList.remove('text-slate-400');
+            } else {
+                btn.classList.remove('bg-ortex-gold', 'text-black');
+                btn.classList.add('text-slate-400');
+            }
+        });
+
+        cards.forEach(card => {
+            if (cat === 'all' || card.getAttribute('data-category') === cat) {
+                card.style.display = 'flex';
+            } else {
+                card.style.display = 'none';
+            }
+        });
+    }
+
+    // Configurator Logic
+    function updateConfigurator() {
+        const structure = document.getElementById('cfg-structure').value;
+        const fiberRatio = document.getElementById('cfg-fiber').value;
+        const gsm = document.getElementById('cfg-gsm').value;
+
+        document.getElementById('fiber-ratio-val').innerText = `${fiberRatio}% Organic Cotton / ${100 - fiberRatio}% Recycled Poly`;
+        document.getElementById('gsm-val').innerText = `${gsm} GSM`;
+
+        document.getElementById('summary-structure').innerText = structure;
+        document.getElementById('summary-blend').innerText = `${fiberRatio}/${100 - fiberRatio} Cotton/Poly`;
+        document.getElementById('summary-gsm').innerText = `${gsm} GSM`;
+
+        const checkedFinishes = Array.from(document.querySelectorAll('.cfg-finish:checked')).map(el => el.value);
+        document.getElementById('summary-finishes').innerText = checkedFinishes.length > 0 ? checkedFinishes.join(', ') : 'Standard Natural Finish';
+    }
+
+    function submitCustomConfig() {
+        alert('Your custom fabric specification has been logged. Our textile engineers will contact you with lab sample timelines.');
+    }
+
+    // Search Modal
+    function toggleSearchModal() {
+        const modal = document.getElementById('search-modal');
+        modal.classList.toggle('opacity-0');
+        modal.classList.toggle('invisible');
+    }
+
+    function handleSearch() {
+        const query = document.getElementById('search-input').value.toLowerCase();
+        const results = document.getElementById('search-results');
+        
+        if (!query) {
+            results.innerHTML = '<p class="text-ortex-muted italic">Type to search material library...</p>';
+            return;
+        }
+
+        const items = [
+            'Structural Twill 380 - Woven',
+            'Fluid Bamboo Jersey - Knitted',
+            'Crisp Organic Poplin - Cotton',
+            'Hydro-Shield Ripstop - Technical'
+        ];
+
+        const filtered = items.filter(i => i.toLowerCase().includes(query));
+        
+        if (filtered.length > 0) {
+            results.innerHTML = filtered.map(f => `
+                <div class="p-2.5 rounded bg-white/5 hover:bg-ortex-gold hover:text-black cursor-pointer transition-colors" onclick="toggleSearchModal()">
+                    ${f}
+                </div>
+            `).join('');
+        } else {
+            results.innerHTML = '<p class="text-ortex-muted italic">No matching materials found.</p>';
+        }
+    }
+
+    function handleInquirySubmit(e) {
+        e.preventDefault();
+        alert('Thank you! Your inquiry and swatch request have been dispatched to the ORTEX technical team.');
+    }
+</script>
+</body>
+</html>
